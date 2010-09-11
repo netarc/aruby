@@ -1,0 +1,4 @@
+ARuby::Config.run do |config|
+  config.aruby.debug_enabled = true
+  
+end

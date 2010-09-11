@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
 require 'aruby'
 
-begin
+env = ARuby::Environment.new
 
+begin
+  ARuby::CLI.start(ARGV, :env => env)
 rescue Exception => e
   exit e.status_code if e.respond_to?(:status_code)
   exit 999 # An error occurred with no status code defined

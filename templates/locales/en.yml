@@ -1,0 +1,14 @@
+en:
+  aruby:
+
+    errors:
+      config_file_syntax_error:|-
+        There is a syntax error in the following .aruby file. The syntax error
+        message is reproduced below for convenience:
+
+        %{file}
+      config_validation: |-
+        There was a problem with the configuration of ARuby. The error message(s)
+        are printed below:
+
+        %{messages}

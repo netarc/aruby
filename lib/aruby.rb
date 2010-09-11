@@ -6,6 +6,7 @@ module ARuby
 
   autoload :CLI,         'aruby/cli'
   autoload :Config,      'aruby/config'
+  autoload :Command,     'aruby/command'
   autoload :Errors,      'aruby/errors'
   autoload :Environment, 'aruby/environment'
   autoload :Util,        'aruby/util'

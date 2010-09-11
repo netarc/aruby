@@ -3,3 +3,5 @@ module ARuby
     autoload :Base, 'aruby/command/base'
   end
 end
+
+require 'aruby/command/compile'

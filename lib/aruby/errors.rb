@@ -51,13 +51,18 @@ module ARuby
       end
     end
 
-    class ConfigFileSyntaxError < ARubyError
+    class CLIMissingEnvironment < ARubyError
       status_code(1)
+      error_key(:cli_missing_env)
+    end
+
+    class ConfigFileSyntaxError < ARubyError
+      status_code(2)
       error_key(:config_file_syntax_error)
     end
 
     class ConfigValidationFailed < ARubyError
-      status_code(2)
+      status_code(3)
       error_key(:config_validation)
     end
 

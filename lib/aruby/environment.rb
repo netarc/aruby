@@ -7,6 +7,7 @@ module ARuby
   # storing references to various instances.
   class Environment
     attr_reader :cwd
+    attr_writer :ui
 
     def initialize(opts=nil)
       opts = {
@@ -51,6 +52,16 @@ module ARuby
     # came from the real command line (sometimes they do!)
     def cli(*args)
       CLI.start(args.flatten, :env => self)
+    end
+
+    # Returns the {Action} class for this environment which allows actions
+    # to be executed in the context of this environment.
+    def actions
+      @actions ||= Action.new(self)
+    end
+
+    def ui
+      @ui ||= ARuby::UI.new(self)
     end
 
     private

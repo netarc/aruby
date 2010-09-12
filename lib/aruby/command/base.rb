@@ -27,6 +27,7 @@ module ARuby
       def initialize_environment(args, options, config)
         raise Errors::CLIMissingEnvironment.new if !config[:env]
         @env = config[:env]
+        @env.ui = UI::Shell.new(@env, shell) if !@env.ui.is_a?(UI::Shell)
       end
 
       # Register the command with the main ARuby CLI under the

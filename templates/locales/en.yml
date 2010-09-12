@@ -2,6 +2,7 @@ en:
   aruby:
 
     errors:
+      cli_missing_env: This command requires that a ARuby environment be properly passed in as the last parameter.
       config_file_syntax_error:|-
         There is a syntax error in the following .aruby file. The syntax error
         message is reproduced below for convenience:

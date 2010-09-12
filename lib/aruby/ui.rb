@@ -56,7 +56,8 @@ module ARuby
 
       def line_reset
         reset = "\r"
-        reset += "\e[0K" unless Mario::Platform.windows?
+        reset += "\e[0K"
+#        reset += "\e[0K" unless Mario::Platform.windows?
         reset
       end
     end

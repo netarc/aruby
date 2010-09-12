@@ -10,17 +10,11 @@ module ARuby
     def self.register(klass, name, usage, description, opts=nil)
       opts ||= {}
 
-      puts "registering: #{klass.inspect} | #{name.inspect} | #{usage.inspect} | #{description.inspect}"
-
       if klass <= Command::Base
         # A subclass of Base is a single command, since it
         # is invoked as a whole (as Thor::Group)
         desc usage, description, opts
-#        define_method(name) { |*args| invoke klass, args }
-        define_method(name) do |*args|
-          puts "invoking with args: #{args.inspect}"
-          invoke klass, args
-        end
+        define_method(name) { |*args| invoke klass, args }
       end
 
       if opts[:alias]

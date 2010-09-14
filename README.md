@@ -15,11 +15,12 @@ Grab the gem:
 
 To build your first program:
 
-    TODO
+    aruby compile myclass.rb
 
 ## Getting Started Guide and Video
 
-TODO
+    aruby compile project.aruby
+    aruby init project.aruby
 
 ## Installing the Gem from Git
 

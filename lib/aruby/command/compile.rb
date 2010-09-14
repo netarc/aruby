@@ -1,10 +1,15 @@
 module ARuby
   module Command
     class CompileCommand < Base
-      desc "Compile a given environment"
-      register "compile"
+
+      register :compile
+      desc "", "compile a given file or project"
+      long_desc <<END
+some really long desc
+END
+
+      method_option :force, :type => :boolean, :aliases => "-f", :desc => "do some forceful stuff!"
       argument :name, :type => :string, :optional => true
-      class_option :execute, :type => :string, :default => false, :aliases => "-e"
 
       def execute
         puts "test: #{name}"

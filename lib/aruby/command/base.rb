@@ -25,15 +25,25 @@ module ARuby
         initialize_environment(*args)
       end
 
-      # Register the command with the main ARuby CLI under the
-      # given name. The name will be used for accessing it from the CLI,
-      # so if you name it "dostuff", then the command to invoke this
-      # will be `aruby dostuff`.
-      #
-      # The description added to the class via the `desc` method will be
-      # used as a description for the command.
-      def self.register(usage, opts=nil)
-        CLI.register(self, extract_name_from_usage(usage), usage, desc, opts)
+      def self.register(name)
+        @command_name = name
+        CLI.desc "", ""
+        CLI.send(:define_method, name, Proc.new{ |*args| invoke self, args })
+      end
+
+      def self.desc(usage, description, options={})
+        options[:for] = @command_name
+        CLI.desc "#{@command_name} #{usage}", description, options
+      end
+
+      def self.long_desc(description, options={})
+        options[:for] = @command_name
+        CLI.long_desc description, options
+      end
+
+      def self.method_option(name, options={})
+        options[:for] = @command_name
+        CLI.method_option name, options
       end
 
       # Extracts the name of the command from a usage string. Example:

@@ -1,6 +1,6 @@
 module ARuby
   module Command
-    class VersionCommand < Base
+    class VersionCommand < ARuby::Command::Base
 
       register :version
       desc "", "Prints the ARuby version information", :alias => %w(-v --version)

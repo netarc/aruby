@@ -7,6 +7,10 @@ begin
   ARuby::CLI.start(ARGV, :env => env)
 rescue Exception => e
   opts = { :_translate => false, :_prefix => false }
+
+  puts "Exception raised: #{e.message}"
+  puts e.backtrace.join("\n")
+
   env.ui.error e.message, opts if e.message
   env.ui.error e.backtrace.join("\n"), opts if ENV["ARUBY_DEBUG"]
   exit e.status_code if e.respond_to?(:status_code)

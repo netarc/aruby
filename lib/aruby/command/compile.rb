@@ -2,17 +2,17 @@ module ARuby
   module Command
     class CompileCommand < Base
 
-      register :compile
-      desc "", "compile a given file or project"
+      desc "compile SOURCE", "compile a given file or project"
       long_desc <<END
 some really long desc
 END
 
-      method_option :force, :type => :boolean, :aliases => "-f", :desc => "do some forceful stuff!"
-      argument :name, :type => :string, :optional => true
+      class_option :force, :type => :boolean, :aliases => "-f", :desc => "do some forceful stuff!"
+      argument :source, :type => :string
+      map "-c" => :compile
 
       def execute
-        puts "test: #{name}"
+        puts "test: #{source}"
         puts "executing compile command: #{options.inspect}"
       end
     end

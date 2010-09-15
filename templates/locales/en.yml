@@ -13,3 +13,10 @@ en:
         are printed below:
 
         %{messages}
+
+#-------------------------------------------------------------------------------
+# Translations for commands. e.g. `aruby xyz`
+#-------------------------------------------------------------------------------
+    commands:
+      version:
+        output: "ARuby version %{version}"

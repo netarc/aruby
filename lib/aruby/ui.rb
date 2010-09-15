@@ -50,7 +50,7 @@ module ARuby
       def format_message(message, opts=nil)
         opts = { :_prefix => true, :_translate => true }.merge(opts || {})
         message = I18n.t(message, opts) if opts[:_translate]
-        message = "[#{env.resource}] #{message}" if opts[:_prefix]
+        message = "#{message}" if opts[:_prefix]
         message
       end
 

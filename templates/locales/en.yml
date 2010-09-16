@@ -21,5 +21,10 @@ en:
 # Translations for commands. e.g. `aruby xyz`
 #-------------------------------------------------------------------------------
     commands:
+      general:
+        abort: "Aborting command..."
+
+      init:
+        overwrite_ask: "Specified file already exists, overwrite?"
       version:
         output: "ARuby version %{version}"

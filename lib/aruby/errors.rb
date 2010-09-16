@@ -66,5 +66,15 @@ module ARuby
       error_key(:config_validation)
     end
 
+    class PathNotFound < ARubyError
+      status_code(20)
+      error_key(:path_not_found)
+    end
+
+    class PathNotFile < ARubyError
+      status_code(21)
+      error_key(:path_not_file)
+    end
+
   end
 end

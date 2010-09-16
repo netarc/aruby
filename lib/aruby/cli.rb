@@ -11,5 +11,7 @@ end
 
 # TODO: A Cleaner way?
 require 'aruby/command/compile'
+require 'aruby/command/decompile'
+require 'aruby/command/init'
 require 'aruby/command/version'
 #require 'aruby/command/box'

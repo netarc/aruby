@@ -8,6 +8,7 @@ module ARuby
   class Environment
     attr_reader :cwd
     attr_writer :ui
+    attr_writer :project_file
 
     def initialize(opts=nil)
       opts = {
@@ -25,6 +26,7 @@ module ARuby
       @logger = nil
     end
 
+
     # Accesses the logger for ARuby. This logger is a _detailed_
     # logger which should be used to log internals only.
     def logger
@@ -32,6 +34,7 @@ module ARuby
     end
 
     def config
+      puts "config"
       load! if !loaded?
       @config
     end
@@ -41,6 +44,7 @@ module ARuby
     end
 
     def load!
+      puts "load!"
       unless loaded?
         @loaded = true
         load_config!
@@ -64,11 +68,18 @@ module ARuby
       @ui ||= ARuby::UI.new(self)
     end
 
+
+    # NOTE: This seems more like an action then part of our environment, split this out somewhere?
+    def compile_project
+
+    end
+
     private
 
     def load_config!
       loader = Config.new(self)
       loader.queue << File.expand_path("config/default.rb", ARuby.source_root)
+      loader.queue << File.expand_path(@project_file, ARuby.source_root) unless @project_file.nil?
 
       @config = loader.load!
       @logger = nil

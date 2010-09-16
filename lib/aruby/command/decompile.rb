@@ -1,14 +1,14 @@
 module ARuby
   module Command
-    class CompileCommand < Base
+    class DecompileCommand < Base
 
-      desc "compile SOURCE", "compile a given file or project"
+      desc "decompile SOURCE", "examine the conents of a given SWF file"
       long_desc <<END
-compile a given file or project file
+decompile a given SWF file to examine the conents
 END
 
       argument :source, :type => :string
-      map "-c" => :compile
+      map "-d" => :decompile
 
       def execute
         source_path = File.expand_path(source, env.cwd)
@@ -19,9 +19,6 @@ END
           raise Errors::PathNotFile.new(:path => source_path)
         end
 
-        env.project_file = source_path
-        puts "test: #{source_path}"
-        puts "executing compile command: #{options.inspect}"
       end
     end
   end

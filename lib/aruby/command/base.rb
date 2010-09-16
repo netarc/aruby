@@ -15,6 +15,7 @@ module ARuby
       include Thor::Actions
       include Helpers
 
+      # This is just a passthrough to our CLI
       def self.desc(usage, description, options={})
         klass = self
         @command_name = extract_name_from_usage(usage).to_sym
@@ -22,15 +23,19 @@ module ARuby
         CLI.send(:define_method, @command_name, Proc.new{ |*args| invoke klass, args })
       end
 
+      # This is just a passthrough to our CLI
       def self.long_desc(description, options={})
         options[:for] = @command_name
         CLI.long_desc description, options
       end
 
+      # This is just a passthrough to our CLI
       def self.map(mappings=nil)
         CLI.map(mappings)
       end
 
+      # This is just a passthrough to our CLI, this is important to allow `aruby help command` to actually output
+      # arguments and other additional information
       def self.class_option(name, options={})
         options[:for] = @command_name
         CLI.method_option name, options

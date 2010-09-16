@@ -9,6 +9,7 @@ module ARuby
   end
 end
 
-# Anyway to autoload these into the CLI?
+# TODO: A Cleaner way?
 require 'aruby/command/compile'
-require 'aruby/command/box'
+require 'aruby/command/version'
+#require 'aruby/command/box'

@@ -1,9 +1,9 @@
 module ARuby
   module Command
-    class VersionCommand < ARuby::Command::Base
+    class VersionCommand < Base
 
-      register :version
-      desc "", "Prints the ARuby version information", :alias => %w(-v --version)
+      desc "version", "Prints the ARuby version information"
+      map ["-v", "--version"] => :version
 
       def execute
         env.ui.info("aruby.commands.version.output", :version => ARuby::VERSION)

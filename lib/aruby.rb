@@ -24,3 +24,5 @@ end
 
 # Default I18n to load the en locale
 I18n.load_path << File.expand_path("templates/locales/en.yml", ARuby.source_root)
+
+require 'aruby/exts'

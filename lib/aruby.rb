@@ -1,9 +1,10 @@
 require 'pathname'
 require 'json'
 require 'i18n'
+require 'byte_buffer'
+require 'structured_object'
 
 module ARuby
-
   autoload :CLI,         'aruby/cli'
   autoload :Config,      'aruby/config'
   autoload :Command,     'aruby/command'

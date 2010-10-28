@@ -15,7 +15,7 @@ en:
         %{messages}
 
       path_not_found: "Specified path does not exist: %{path}"
-      path_not_file: "Specified path isnot a valid file: %{path}"
+      path_not_file: "Specified path cannot be a directory: %{path}"
 
 #-------------------------------------------------------------------------------
 # Translations for commands. e.g. `aruby xyz`

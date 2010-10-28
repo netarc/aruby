@@ -12,10 +12,4 @@ class CommandBaseTest < Test::Unit::TestCase
       assert_nothing_raised { @klass.new([], {}, { :env => @env }) }
     end
   end
-
-  context "test" do
-    should "do stuff" do
-      ARuby::CLI.start(["compile"], :env => @env)
-    end
-  end
 end

@@ -16,6 +16,8 @@ module ARuby
             return
           end
         end
+
+        template "project_file.erb", dest_path
       end
     end
   end

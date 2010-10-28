@@ -34,7 +34,6 @@ module ARuby
     end
 
     def config
-      puts "config"
       load! if !loaded?
       @config
     end
@@ -44,7 +43,6 @@ module ARuby
     end
 
     def load!
-      puts "load!"
       unless loaded?
         @loaded = true
         load_config!

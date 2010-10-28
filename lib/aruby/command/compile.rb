@@ -20,7 +20,6 @@ END
         end
 
         env.project_file = source_path
-        env.compile_project
 
         swf = ARuby::SWF.new(env)
       end

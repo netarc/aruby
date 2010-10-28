@@ -112,3 +112,4 @@ end
 
 # The built-in configuration classes
 require 'aruby/config/aruby'
+require 'aruby/config/swf'

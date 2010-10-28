@@ -3,6 +3,7 @@ module ARuby
     class InitCommand < Base
 
       desc "init FILE", "create a default .aruby project file with the specified name"
+      source_root File.expand_path("templates/commands/init", ARuby.source_root)
 
       argument :file, :type => :string
       map "-i" => :init

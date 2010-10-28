@@ -24,15 +24,15 @@ module ARuby
       end
 
       [[:warn, :yellow], [:error, :red], [:info, nil], [:confirm, :green]].each do |method, color|
-        define_method(method) do |message, opts|
-          @shell.say("#{line_reset}#{format_message(message, opts)}", color)
+        define_method(method) do |message, *opts|
+          @shell.say("#{line_reset}#{format_message(message, *opts)}", color)
         end
       end
 
       [:ask, :no?, :yes?].each do |method|
-        define_method(method) do |message, opts|
+        define_method(method) do |message, *opts|
           opts ||= {}
-          @shell.send(method, format_message(message, opts), opts[:_color])
+          @shell.send(method, format_message(message, *opts), opts[:_color])
         end
       end
 

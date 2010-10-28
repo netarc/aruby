@@ -9,7 +9,7 @@ module ARuby
       map "-i" => :init
 
       def execute
-        dest_path = File.expand_path(File.join(file, '.aruby'), env.cwd)
+        dest_path = File.expand_path(File.join("#{file}.aruby"), env.cwd)
 
         if File.exists?(dest_path)
           if !env.ui.yes? "aruby.commands.init.overwrite_ask", :_color => :yellow

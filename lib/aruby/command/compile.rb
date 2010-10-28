@@ -20,8 +20,9 @@ END
         end
 
         env.project_file = source_path
-        puts "test: #{source_path}"
-        puts "executing compile command: #{options.inspect}"
+        env.compile_project
+
+        swf = ARuby::SWF.new(env)
       end
     end
   end

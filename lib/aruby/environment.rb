@@ -66,12 +66,6 @@ module ARuby
       @ui ||= ARuby::UI.new(self)
     end
 
-
-    # NOTE: This seems more like an action then part of our environment, split this out somewhere?
-    def compile_project
-
-    end
-
     private
 
     def load_config!

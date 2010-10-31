@@ -25,7 +25,8 @@ class ByteBuffer
       v
     end
     type.write = Proc.new do |byte_buffer, data|
-      byte_buffer.write [data.to_i].pack('L')[0..-2] }
+      byte_buffer.write [data.to_i].pack('L')[0..-2]
+    end
   end
 
   # 4-Byte Numbers
@@ -44,7 +45,7 @@ class ByteBuffer
       byte_buffer.read_u32 & 0x3fffffff
     end
     type.write = Proc.new do |byte_buffer, data|
-      byte_buffer.write_u32 (value & 0x3fffffff)
+      byte_buffer.write_u32 value & 0x3fffffff
     end
   end
 
@@ -79,7 +80,7 @@ class ByteBuffer
   end
 
 
-  define_type :u32 do |type|
+  define_type :s32 do |type|
     type.read = Proc.new do |byte_buffer, args|
       shift = 0
       value = 0
@@ -131,39 +132,42 @@ class ByteBuffer
 #                                    write_ui8 value & 0xFF
 #                                  }
 
-#   define_type :fixed8,
-#                 :default => {},
-#                 :read => Proc.new { ui16 = read_ui16
-#                                   {:whole=>(ui16>>8), :fraction=>(ui16&0xFF)}
-#                                 },
-#                 :write => Proc.new { ui16 = (value[:whole] << 8) | (value[:fraction]&0xFF)
-#                                    write_ui16 ui16
-#                                  }
+  define_type :fixed8 do |type|
+    type.read = Proc.new do |byte_buffer, args|
+      ui16 = byte_buffer.read_ui16
+      {:whole => (ui16>>8), :fraction => (ui16 & 0xFF)}
+    end
+    type.write = Proc.new do |byte_buffer, data|
+      ui16 = (data[:whole] << 8) | (data[:fraction] & 0xFF)
+      byte_buffer.write_ui16(ui16)
+    end
+  end
 
-#   define_type :rect,
-#                 :default => {},
-#                 :read => Proc.new { bits = read_bits 5;
-#                                   xmin = read_bits bits
-#                                   xmax= read_bits bits
-#                                   ymin = read_bits bits
-#                                   ymax = read_bits bits
-#                                   {:xmin=>xmin, :xmax=>xmax, :ymin=>ymin, :ymax=>ymax}
-#                                 },
-#                 :write => Proc.new {
-#                                     largest = 0
-#                                     actual_value = 0
-#                                     value.each_value {|v|
-#                                       if v.abs > largest
-#                                         largest = v.abs
-#                                         actual_value = v
-#                                       end
-#                                     }
-#                                     bits = largest.sbits
-#                                     write_bits 5, bits
-#                                     write_bits bits, value[:xmin]
-#                                     write_bits bits, value[:xmax]
-#                                     write_bits bits, value[:ymin]
-#                                     write_bits bits, value[:ymax]
-#                                 }
-
+  define_type :rect do |type|
+    type.read = Proc.new do |byte_buffer, args|
+      bits = byte_buffer.read_bits(5)
+      {
+        :xmin => byte_buffer.read_bits(bits),
+        :xmax => byte_buffer.read_bits(bits),
+        :ymin => byte_buffer.read_bits(bits),
+        :ymax => byte_buffer.read_bits(bits)
+      }
+    end
+    type.write = Proc.new do |byte_buffer, data|
+      largest = 0
+      actual_value = 0
+      data.each_value {|v|
+        if v.abs > largest
+          largest = v.abs
+          actual_value = v
+        end
+      }
+      bits = (Math.log(largest.abs)/Math.log(2)).floor + 2
+      byte_buffer.write_bits 5, bits
+      byte_buffer.write_bits bits, data[:xmin]
+      byte_buffer.write_bits bits, data[:xmax]
+      byte_buffer.write_bits bits, data[:ymin]
+      byte_buffer.write_bits bits, data[:ymax]
+    end
+  end
 end

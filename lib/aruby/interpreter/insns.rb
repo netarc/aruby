@@ -50,6 +50,7 @@ module ARuby
   end
 end
 
-require 'aruby/interpreter/insns/settings'
-require 'aruby/interpreter/insns/put'
+require 'aruby/interpreter/insns/constant'
 require 'aruby/interpreter/insns/optimize'
+require 'aruby/interpreter/insns/put'
+require 'aruby/interpreter/insns/settings'

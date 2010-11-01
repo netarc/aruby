@@ -52,3 +52,4 @@ end
 
 require 'aruby/interpreter/insns/settings'
 require 'aruby/interpreter/insns/put'
+require 'aruby/interpreter/insns/optimize'

@@ -38,7 +38,7 @@ module ARuby
       iseq_def[:pop_values].reverse_each do |v|
         data_hash[v] = scope_stack.pop
       end
-      bi = BlockBinding.new(data_hash, &iseq_def[:block])
+      bi = Util::BlockBinding.new(data_hash, &iseq_def[:block])
       scope_stack.push bi.val unless bi.val == :deadbeef
     end
 

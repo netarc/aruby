@@ -53,16 +53,16 @@ module ARuby
       iseq_body.each do |iseq_cmd|
         if iseq_cmd.is_a? Integer
           iseq_line = iseq_cmd
-          puts "--[#{iseq_cmd}]--"
+          @env.logger.debug "--[#{iseq_cmd}]--"
         elsif iseq_cmd.is_a? Symbol
           iseq_label = iseq_cmd
-          puts "--[#{iseq_cmd}]--"
+          @env.logger.debug "--[#{iseq_cmd}]--"
         elsif iseq_cmd.is_a? Array
 
           #ARuby.print_obj iseq_cmd
           #iseq_process_ins iseq_cmd, scope_stack, scope_object
 
-          puts " +stack #{scope_stack.dump_to_s}"
+          @env.logger.debug " +stack #{scope_stack.dump_to_s}"
         end
       end
     end

@@ -16,7 +16,13 @@ module ARuby
       file_contents = File.open(file_path) { |f| f.read }
       file_iseq = ::RubyVM::InstructionSequence.compile(file_contents)
 
-      #iseq_process_top file_iseq.to_a, file_path
+      iseq_process_top file_iseq.to_a, file_path
+    end
+
+    def generate_byte_code
+      #abc = ARuby::ABC.new
+      #abc.serialize.to_s
+      ""
     end
 
     protected
@@ -48,3 +54,5 @@ module ARuby
     end
   end
 end
+
+require "aruby/interpreter/iseq"

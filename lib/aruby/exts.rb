@@ -121,16 +121,18 @@ class ByteBuffer
 #                                    write value if value.length > 0
 #                                  }
 
-#   define_type :rgb,
-#                 :default => 0,
-#                 :read => Proc.new { rgb = read_byte_val(false) << 16
-#                                   rgb |= read_byte_val(false) << 8
-#                                   rgb |= read_byte_val(false)
-#                                 },
-#                 :write => Proc.new { write_ui8 (value >> 16) & 0xFF
-#                                    write_ui8 (value >> 8) & 0xFF
-#                                    write_ui8 value & 0xFF
-#                                  }
+  define_type :rgb do |type|
+    type.read = Proc.new do |byte_buffer, args|
+      rgb = byte_buffer.read_byte << 16
+      rgb |= byte_buffer.read_byte << 8
+      rgb |= byte_buffer.read_byte
+    end
+    type.write = Proc.new do |byte_buffer, data|
+      byte_buffer.write_byte (data >> 16) & 0xFF
+      byte_buffer.write_byte (data >> 8) & 0xFF
+      byte_buffer.write_byte data & 0xFF
+    end
+  end
 
   define_type :fixed8 do |type|
     type.read = Proc.new do |byte_buffer, args|

@@ -87,43 +87,46 @@ module ARuby
       file_attributes.has_metadata = false
       tags << file_attributes
 
-#       script_limits = Tag::ScriptLimits.new
-#       script_limits.max_recursion_depth = 1000
-#       script_limits.script_timeout_secs = 60
-#       tags << script_limits
+      script_limits = Tag::ScriptLimits.new
+      script_limits.max_recursion_depth = 1000
+      script_limits.script_timeout_secs = 60
+      tags << script_limits
 
-#       debug_id = Tag::DebugID.new
-#       debug_id.debug_id = 'so{?v?Zl?"6kK'
-#       tags << debug_id
+      debug_id = Tag::DebugID.new
+      debug_id.debug_id = 'so{?v?Zl?"6kK'.split('')
+      tags << debug_id
 
-#       enable_debugger = Tag::EnableDebugger2.new
-#       enable_debugger.reserved = 6517
-#       enable_debugger.password = "$1$Xz$Sknz.DjgLWj/AvuUekVF0/"
-#       tags << enable_debugger
+      enable_debugger = Tag::EnableDebugger2.new
+      enable_debugger.reserved = 6517
+      enable_debugger.password = "$1$Xz$Sknz.DjgLWj/AvuUekVF0/"
+      tags << enable_debugger
 
-#       bg_color = Tag::SetBackgroundColor.new
-#       bg_color.background_color = @background_color
-#       tags << bg_color
+      bg_color = Tag::SetBackgroundColor.new
+      bg_color.background_color = @env.config.swf.background_color
+      tags << bg_color
 
-#       frame_label = Tag::FrameLabel.new
-#       frame_label.name = 'Frame1'
-#       tags << frame_label
+      frame_label = Tag::FrameLabel.new
+      frame_label.name = 'Frame1'
+      tags << frame_label
 
-#       abc = Tag::DoABC.new
-#       abc.flags = 1
-#       abc.name = "aruby"
-#       abc.bytecode = @interpreter.generate_byte_code(@entry_class)
-#       tags << abc
+      abc = Tag::DoABC.new
+      abc.flags = 1
+      abc.name = "aruby"
+      abc.bytecode = @interpreter.generate_byte_code
+      tags << abc
 
-#       symbol_class = Tag::SymbolClass.new
-#       symbol_class.symbols << {:tag=>0, :name=> @entry_class}
-#       tags << symbol_class
+      symbol_class = Tag::SymbolClass.new
+      symbol = symbol_class.symbols.new
+      symbol.tag = 0
+      symbol.name = @env.config.swf.entry_class
+      symbol_class.symbols << symbol
+      tags << symbol_class
 
-#       show_frame = Tag::ShowFrame.new
-#       tags << show_frame
+      show_frame = Tag::ShowFrame.new
+      tags << show_frame
 
-#       end_tag = Tag::End.new
-#       tags << end_tag
+      end_tag = Tag::End.new
+      tags << end_tag
 
       tags
     end

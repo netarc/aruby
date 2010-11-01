@@ -34,8 +34,9 @@ module ARuby
         end
 
         # Override serialization
-        def serialize
-          contents = super.buffer
+        def serialize_struct
+          puts "serializing #{self.class}"
+          contents = super
           content_size = contents.length
           io = ByteBuffer.new
           if content_size < 0x3F

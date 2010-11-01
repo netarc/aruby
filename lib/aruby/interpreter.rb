@@ -56,3 +56,4 @@ module ARuby
 end
 
 require "aruby/interpreter/iseq"
+require "aruby/interpreter/stack"

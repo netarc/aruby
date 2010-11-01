@@ -57,3 +57,4 @@ end
 
 require "aruby/interpreter/iseq"
 require "aruby/interpreter/stack"
+require "aruby/interpreter/insns"

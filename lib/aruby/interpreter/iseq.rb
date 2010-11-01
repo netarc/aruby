@@ -59,8 +59,8 @@ module ARuby
           @env.logger.debug "--[#{iseq_cmd}]--"
         elsif iseq_cmd.is_a? Array
 
-          #ARuby.print_obj iseq_cmd
-          #iseq_process_ins iseq_cmd, scope_stack, scope_object
+          @env.logger.debug " +stack #{iseq_cmd.inspect}"
+          iseq_process_ins iseq_cmd, scope_stack, scope_object
 
           @env.logger.debug " +stack #{scope_stack.dump_to_s}"
         end

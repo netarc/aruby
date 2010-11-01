@@ -51,3 +51,4 @@ module ARuby
 end
 
 require 'aruby/interpreter/insns/settings'
+require 'aruby/interpreter/insns/put'

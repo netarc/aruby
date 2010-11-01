@@ -49,3 +49,5 @@ module ARuby
 
   end
 end
+
+require 'aruby/interpreter/insns/settings'

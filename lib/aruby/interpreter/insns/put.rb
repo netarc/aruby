@@ -13,7 +13,7 @@ module ARuby
       when VM_SPECIAL_OBJECT_CBASE
         val = :cbase
       when VM_SPECIAL_OBJECT_CONST_BASE
-        val = :undef
+        val = :const_base
       else
         # TODO: Log/Abort?
         raise "putspecialobject insn: unknown value_type"

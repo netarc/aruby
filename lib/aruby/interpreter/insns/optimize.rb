@@ -3,7 +3,6 @@ module ARuby
     protected
 
     iseq_define_ins :getinlinecache, [:dst, :ic], [] do
-      val = :nil
     end
 
     iseq_define_ins :setinlinecache, [:dst], [:val] do

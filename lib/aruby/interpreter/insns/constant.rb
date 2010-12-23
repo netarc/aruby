@@ -10,8 +10,9 @@ module ARuby
         # search top scope
         raise "TODO"
       else
+        val = id
         # search klass
-        raise "TODO"
+        #        raise "TODO"
       end
     end
 

@@ -23,7 +23,7 @@ module ARuby
       raise ISEQ_InvalidFormat unless iseq[13].is_a?(Array)
     end
 
-    def iseq_process_top iseq, file_path
+    def iseq_process_top(iseq, file_path)
       iseq_is_yarv_simple_data! iseq
 
       case iseq[9]
@@ -39,7 +39,7 @@ module ARuby
     end
 
     # Process a block/thread of ISEQ in it's own scope
-    def iseq_process iseq, file_path
+    def iseq_process(iseq, file_path)
       iseq_is_yarv_simple_data! iseq
 
       # TODO: CLEANUP
@@ -59,10 +59,11 @@ module ARuby
           @env.logger.debug "--[#{iseq_cmd}]--"
         elsif iseq_cmd.is_a? Array
 
-          @env.logger.debug " +stack #{iseq_cmd.inspect}"
+          puts "\n\r - ISEQ #{iseq_cmd.inspect}"
+          @env.logger.debug " + start stack #{scope_stack.dump_to_s}"
           iseq_process_ins iseq_cmd, scope_stack, scope_object
 
-          @env.logger.debug " +stack #{scope_stack.dump_to_s}"
+          @env.logger.debug " + end stack #{scope_stack.dump_to_s}"
         end
       end
     end

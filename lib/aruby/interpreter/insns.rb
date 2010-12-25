@@ -21,12 +21,12 @@ module ARuby
     end
 
     @@iseq_insns = {}
-    def self.iseq_define_ins id, operands, pop_values, &block
+    def self.iseq_define_ins(id, operands, pop_values, &block)
       raise ISEQ_DuplicateInstruction, id if @@iseq_insns[id]
       @@iseq_insns[id] = {:id => id, :operands => operands, :pop_values => pop_values, :block => block}
     end
 
-    def iseq_process_ins iseq, scope_stack, scope_object
+    def iseq_process_ins(iseq, scope_stack, scope_object)
       unless iseq_def = @@iseq_insns[iseq[0]]
         raise ISEQ_UnknownInstruction, iseq[0]
       end

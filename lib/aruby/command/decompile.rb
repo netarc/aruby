@@ -19,6 +19,9 @@ END
           raise Errors::PathNotFile.new(:path => source_path)
         end
 
+        swf = ARuby::SWF.new(env)
+        swf.read_from_file(source_path)
+
       end
     end
   end

@@ -7,14 +7,17 @@ module ARuby
 
         attr_reader :id
 
-        def self.define_tag id
+        def self.define_tag(id)
           TAG_BY_CLASS[self] = id
           TAG_BY_ID[id] = self
         end
 
         def self.new_from_io(io)
-          tag_header = io.read_ui16
-          return nil unless tag_header
+          begin
+            tag_header = io.read_ui16
+          rescue ByteBuffer::Errors::BufferUnderflow
+            return nil
+          end
 
           tag_id = tag_header >> 6
           tag_length = tag_header & 0b111111
@@ -24,7 +27,9 @@ module ARuby
           klass = TAG_BY_ID[tag_id]
           return nil if klass.nil?
 
-          klass.new.unserialize(ByteBuffer.new(tag_contents))
+          tag = klass.new
+          tag.unserialize_struct(tag_contents)
+          tag
         end
 
 

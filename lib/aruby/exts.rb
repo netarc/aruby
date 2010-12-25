@@ -135,6 +135,7 @@ class ByteBuffer
   end
 
   define_type :fixed8 do |type|
+    type.conversion = nil
     type.read = Proc.new do |byte_buffer, args|
       ui16 = byte_buffer.read_ui16
       {:whole => (ui16>>8), :fraction => (ui16 & 0xFF)}
@@ -146,6 +147,7 @@ class ByteBuffer
   end
 
   define_type :rect do |type|
+    type.conversion = nil
     type.read = Proc.new do |byte_buffer, args|
       bits = byte_buffer.read_bits(5)
       {

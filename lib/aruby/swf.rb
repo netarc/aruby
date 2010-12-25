@@ -1,3 +1,5 @@
+require 'zlib'
+
 module ARuby
   class SWF
     autoload :Tag,         'aruby/swf/tag'
@@ -10,19 +12,7 @@ module ARuby
     # Load SWF data from a .swf file, this will clear any data currently in our SWF
     def read_from_file(file_path)
       reset!
-
-      input_file = File.new(file_path, "r")
-      input_file.binmode
-
-      io_file = ByteBuffer.new(input_file.read)
-      io_file.rewind
-
-      input_file.close
-
-      io_body = read_header(io_file)
-      read_body io_body
-
-      self
+      from_swf(file_path)
     end
 
     # Export our SWF data to a target file
@@ -54,7 +44,38 @@ module ARuby
       @entry_class = ""
       @interpreter = ARuby::Interpreter.new(@env)
     end
-
+    
+    def from_swf(file_path)
+      buffer = nil
+      File.open(file_path, "r") do |file|
+        file.binmode
+        buffer = ByteBuffer.new(file.read)
+      end
+      
+      header = Header.new
+      header.unserialize_struct(buffer)
+      
+      @compressed = header.signature.collect{|i| i.chr}.join == "CWS"
+      
+      body_io = ByteBuffer.new(@compressed ? Zlib::Inflate.inflate(header.body.to_s) : header.body.to_s)
+      
+      body_io.read_rect # frame_size
+      body_io.read_fixed8 # frame_rate
+      body_io.read_ui16 # frame_coutn
+      
+      while (tag = Tag::Base.new_from_io(body_io))
+        puts "loaded tag: #{tag.id}"
+        
+        if tag.is_a?(Tag::SymbolClass)
+          # @entry_class = tag.symbols[0].name
+        elsif tag.is_a?(Tag::SetBackgroundColor)
+          # @background_color = tag.background_color
+        elsif tag.is_a?(Tag::DoABC)
+          # @workspace.process_swf_bytecode tag.bytecode.to_s
+        end
+      end
+    end
+    
     def to_swf
       # Create our body content
       body = ByteBuffer.new

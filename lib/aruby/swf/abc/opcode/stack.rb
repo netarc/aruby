@@ -208,6 +208,57 @@ module ARuby
             super " index=#{index}||#{@abc_file.namespaces[index]}"
           end
         end
+        
+        # ID: 100 (0x64)
+        # DESC: Gets the global scope
+        # STACK: ... => ..., obj
+        # Gets the global scope object from the scope stack, and pushes it onto the stack. The global 
+        # scope object is the object at the bottom of the scope stack.
+        class GetGlobalScope < Base
+          define_opcode 100, "get_global_scope"
+        end
+        
+        # ID: 101 (0x65)
+        # DESC: Get a scope object
+        # STACK: ... => ..., scope
+        # index is an unsigned byte that specifies the index of the scope object to retrieve from the local 
+        # scope stack. index must be less than the current depth of the scope stack. The scope at that 
+        # index is retrieved and pushed onto the stack. The scope at the top of the stack is at index 
+        # scope_depth-1, and the scope at the bottom of the stack is index 0.
+        class GetScopeObject < Base
+          define_opcode 101, "get_scope_object"
+          struct do
+            u30 :index
+          end
+        end
+        
+        # ID: 108 (0x6C)
+        # DESC: Get the value of a slot
+        # STACK: ..., obj => ..., value
+        # slotindex is a u30 that must be an index of a slot on obj. slotindex must be less than the total 
+        # number of slots obj has.  
+        # This will retrieve the value stored in the slot at slotindex on obj. This value is pushed onto the 
+        # stack.
+        class GetSlot < Base
+          define_opcode 108, "get_slot"
+          struct do
+            u30 :slotindex
+          end
+        end
+        
+        # ID: 110 (0x6E)
+        # DESC: Get the value of a slot on the global scope
+        # STACK: ... => ..., value 
+        # slotindex is a u30 that must be an index of a slot on the global scope. The slotindex must be 
+        # greater than 0 and less than or equal to the total number of slots the global scope has.  
+        # This will retrieve the value stored in the slot at slotindex of the global scope. This value is 
+        # pushed onto the stack.
+        class GetGlobalSlot < Base
+          define_opcode 110, "get_global_slot"
+          struct do
+            u30 :slotindex
+          end
+        end
       end
     end
   end

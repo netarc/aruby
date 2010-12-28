@@ -3,10 +3,10 @@ module ARuby
     class ABC
       module OpCode
         # DESC: All IF operate the same
-        # offset is an s24 that is the number of bytes to jump
+        # offset is an si24 that is the number of bytes to jump
         class OffsetBase < Base
           struct do
-            s24 :offset
+            si24 :offset
           end
         end
         
@@ -180,9 +180,9 @@ module ARuby
           define_opcode 27, "lookup_switch"
           
           struct do
-            s24 :default_offset
-            s30 :case_count
-            s24 :case_offsets, :size => lambda { case_count }
+            si24 :default_offset
+            u30 :case_count
+            si24 :case_offsets, :size => lambda { case_count }
           end
         end
       end

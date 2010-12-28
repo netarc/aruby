@@ -51,7 +51,7 @@ module ARuby
 
           code_length = io.read_u30
           code_data = io.read code_length
-        
+
           # parse abc code
           @code = Code.new_from_io(ByteBuffer.new(code_data.to_s), @abc_file)
 

@@ -45,7 +45,7 @@ class ByteBuffer
       byte_buffer.read_u32 & 0x3fffffff
     end
     type.write = Proc.new do |byte_buffer, data|
-      byte_buffer.write_u32 value & 0x3fffffff
+      byte_buffer.write_u32 data.to_i & 0x3fffffff
     end
   end
 
@@ -67,7 +67,7 @@ class ByteBuffer
     end
     type.write = Proc.new do |byte_buffer, data|
       value = data.to_i
-      bits = (Math.log(value.abs)/Math.log(2)).floor + 1
+      bits = value > 0 ? (Math.log(value.abs)/Math.log(2)).floor + 1 : 1
       shift = 0
       while bits > 0
         vv = (value >> shift) & 0x7F
@@ -111,16 +111,18 @@ class ByteBuffer
     end
   end
 
-
-#   define_type :len_string,
-#                 :default => "",
-#                 :read => Proc.new { size = read_u30
-#                                   size > 0 ? read(size).to_s : ""
-#                                 },
-#                 :write => Proc.new { write_u30 value.length
-#                                    write value if value.length > 0
-#                                  }
-
+  define_type :len_string do |type|
+    type.conversion = :to_s
+    type.read = Proc.new do |byte_buffer, args|
+      size = byte_buffer.read_u30
+      size > 0 ? byte_buffer.read(size) : ""
+    end
+    type.write = Proc.new do |byte_buffer, data|
+      byte_buffer.write_u30 data.length
+      byte_buffer.write data if data.length > 0
+    end
+  end
+  
   define_type :rgb do |type|
     type.read = Proc.new do |byte_buffer, args|
       rgb = byte_buffer.read_byte << 16

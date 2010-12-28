@@ -1,4 +1,5 @@
 require 'zlib'
+require 'aruby/swf/abc'
 
 module ARuby
   class SWF
@@ -71,6 +72,8 @@ module ARuby
         elsif tag.is_a?(Tag::SetBackgroundColor)
           # @background_color = tag.background_color
         elsif tag.is_a?(Tag::DoABC)
+          abc = ARuby::SWF::ABC.new
+          abc.unserialize(ByteBuffer.new(tag.bytecode.to_s))
           # @workspace.process_swf_bytecode tag.bytecode.to_s
         end
       end

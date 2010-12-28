@@ -61,7 +61,7 @@ module ARuby
           read_skip_first("uints", io, @uints     ){ io.read_u32 }
           read_skip_first("doubles", io, @doubles   ){ io.read_d64 }
           read_skip_first("strings", io, @strings   ){ io.read_len_string }
-          read_skip_first("namespaces", io, @namespaces){ ns = Namespace.new(nil, nil, self); ns.unserialize(io); ns }
+          read_skip_first("namespaces", io, @namespaces){ ns = Namespace.new(nil, nil, self); ns.unserialize_struct(io); ns }
           read_skip_first("ns_sets", io, @ns_sets   ){ NsSet.new_from_io(io, self) }
           read_skip_first("multinames", io, @multinames){ Multiname.new_from_io(io, self) }
 
@@ -71,7 +71,7 @@ module ARuby
         def read_skip_first name, io, arr
           size = io.read_u30
           size-=1 if size > 0
-          ARuby.puts_color "+ Reading #{name}(#{size}):", ARuby::COLOUR_YELLOW
+          puts "+ Reading #{name}(#{size}):".yellowish
 
           return if size < 1
 

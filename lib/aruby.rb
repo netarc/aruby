@@ -3,6 +3,7 @@ require 'json'
 require 'i18n'
 require 'byte_buffer'
 require 'structured_object'
+require 'ap'
 
 module ARuby
   autoload :CLI,         'aruby/cli'
@@ -19,6 +20,14 @@ module ARuby
   # The source root is the path to the root directory of the ARuby gem.
   def self.source_root
     @source_root ||= Pathname.new(File.expand_path('../../', __FILE__))
+  end
+  
+  def self.print_obj(obj)
+    ap(obj, :multiline => false)
+  end
+  
+  def self.print_multiline(obj)
+    awesome_print obj, :multiline => true, :indent => 2
   end
 end
 

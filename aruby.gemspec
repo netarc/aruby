@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
   s.add_dependency "i18n", "~> 0.4.1"
   s.add_dependency "erubis", "~> 2.6.6"
   s.add_dependency "thor"
+  s.add_dependency "awesome_print"
 
   s.add_development_dependency "rake"
   s.add_development_dependency "contest", ">= 0.1.2"

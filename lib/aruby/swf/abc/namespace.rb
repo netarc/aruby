@@ -2,9 +2,9 @@ module ARuby
   class SWF
     class ABC
       class Namespace < StructuredObject
-        define_format do
-          struct :kind,       :type => :ui8
-          struct :name_index, :type => :u30
+        struct do
+          ui8 :kind
+          u30 :name_index
         end
       
         # attr_accessor :kind, :name_index

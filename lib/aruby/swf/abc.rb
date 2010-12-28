@@ -48,7 +48,7 @@ module ARuby
       def reset
         @entry_class = ""
 
-        @constant_pool = ARuby::ABC::ConstantPool.new
+        @constant_pool = ARuby::SWF::ABC::ConstantPool.new
         @abc_methods = []
         @metadatas = []
         @instances = []
@@ -139,32 +139,33 @@ module ARuby
         size = io.read_u30
         puts "+ Read Methods(#{size}):".yellowish
         1.upto(size) do |i|
-          @abc_methods << ARuby::ABC::Method.new_from_io(io, self)
+          @abc_methods << ARuby::SWF::ABC::Method.new_from_io(io, self)
         end
         ARuby.print_multiline @abc_methods
 
         size = io.read_u30
         puts "+ Read Metadata(#{size}):".yellowish
         1.upto(size) do |i|
+          @metadatas << ARuby::SWF::ABC::MetaData.new(self).read_from_io(io)
         end
         ARuby.print_multiline @metadatas
 
         size = io.read_u30
         puts "+ Read Instances(#{size}):".yellowish
         1.upto(size) do |i|
-          @instances << ARuby::ABC::Instance.new(self).read_from_io(io)
+          @instances << ARuby::SWF::ABC::Instance.new(self).read_from_io(io)
         end
         ARuby.print_multiline @instances
         puts "+ Read Classes(#{size}):".yellowish
         1.upto(size) do |i|
-          @classes << ARuby::ABC::Class.new_from_io(io, self)
+          @classes << ARuby::SWF::ABC::Class.new_from_io(io, self)
         end
         ARuby.print_multiline @classes
 
         size = io.read_u30
         puts "+ Read Scripts(#{size}):".yellowish
         1.upto(size) do |i|
-          @scripts << ARuby::ABC::Script.new(self).read_from_io(io)
+          @scripts << ARuby::SWF::ABC::Script.new(self).read_from_io(io)
         end
         ARuby.print_multiline @scripts
 
@@ -172,7 +173,7 @@ module ARuby
         size = io.read_u30
         puts "+ Read Method Bodies(#{size})".yellowish
         1.upto(size) do |i|
-          @method_bodies << ARuby::ABC::MethodBody.new(self).read_from_io(io)
+          @method_bodies << ARuby::SWF::ABC::MethodBody.new(self).read_from_io(io)
         end
         ARuby.print_multiline @method_bodies
 
@@ -201,14 +202,19 @@ module ARuby
         @hierarchy[(m.ns.name.to_s+":"+m.name.to_s).to_s]
       end
 
+
       def ints
         @constant_pool.ints
       end
-
+      def uints
+        @constant_pool.uints
+      end      
+      def doubles
+        @constant_pool.doubles
+      end
       def strings
         @constant_pool.strings
       end
-
       def namespaces
         @constant_pool.namespaces
       end
@@ -635,4 +641,6 @@ require 'aruby/swf/abc/class'
 require 'aruby/swf/abc/constant_pool'
 require 'aruby/swf/abc/namespace'
 require 'aruby/swf/abc/multiname'
+require 'aruby/swf/abc/metadata'
+require 'aruby/swf/abc/metadata_item'
 require 'aruby/swf/abc/ns_set'

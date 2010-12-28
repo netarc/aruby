@@ -40,12 +40,18 @@ module ARuby
           self
         end
         def parse_command(io)
-          byte = io.read_ui8
-          return false if byte.nil?
+          begin
+            byte = io.read_ui8
+          rescue ByteBuffer::Errors::BufferUnderflow
+            return false
+          end
+
           op_class = OpCode::Base.find_class_by_id(byte)
           raise "No opcode defined for #{byte} at #{io.pos}." if not op_class
+
+          io.step -1
           op = op_class.new(@abc_file)
-          op.unserialize(io)
+          op.unserialize_struct(io)
           op
         end
 

@@ -5,18 +5,8 @@ module ARuby
       @files_included = []
     end
 
-    def evaluate_ruby_file(path)
-      file_path = sys_find_path(path)
-
-      return if @files_included.include?(file_path)
-      @files_included << file_path
-
-      puts "- interpreting: #{file_path}"
-
-      file_contents = File.open(file_path) { |f| f.read }
-      file_iseq = ::RubyVM::InstructionSequence.compile(file_contents)
-
-      iseq_process_top file_iseq.to_a, file_path
+    def process_iseq(iseq, file_path)
+      iseq_process_top iseq, file_path
     end
 
     def generate_byte_code

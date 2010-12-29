@@ -10,7 +10,7 @@ module ARuby
       reset!
     end
 
-    # Load SWF data from a .swf file, this will clear any data currently in our SWF
+    # Load SWF data from a .swf file. This will clear any data currently in our SWF
     def read_from_file(file_path)
       reset!
       from_swf(file_path)
@@ -24,9 +24,11 @@ module ARuby
       output_file.close
     end
 
-    # Process a given ruby script as Ruby Byte Code and convert it to Actionscript Byte Code
-    def process_script_from_file(file_path)
-      @interpreter.evaluate_ruby_file file_path
+    # Include a file for assembly into the SWF.
+    #
+    # @param path [String] Path to ruby source file or Gem.
+    def include(path)
+      @workspace.include(path)
     end
 
     private
@@ -43,30 +45,30 @@ module ARuby
 
     def reset!
       @entry_class = ""
-      @interpreter = ARuby::Interpreter.new(@env)
+      @workspace = ARuby::Workspace.new(@env)
     end
-    
+
     def from_swf(file_path)
       buffer = nil
       File.open(file_path, "r") do |file|
         file.binmode
         buffer = ByteBuffer.new(file.read)
       end
-      
+
       header = Header.new
       header.unserialize_struct(buffer)
-      
+
       @compressed = header.signature.collect{|i| i.chr}.join == "CWS"
-      
+
       body_io = ByteBuffer.new(@compressed ? Zlib::Inflate.inflate(header.body.to_s) : header.body.to_s)
-      
+
       body_io.read_rect # frame_size
       body_io.read_fixed8 # frame_rate
       body_io.read_ui16 # frame_coutn
-      
+
       while (tag = Tag::Base.new_from_io(body_io))
-        puts "loaded tag: #{tag.id}"
-        
+        @env.logger.info "loaded tag: #{tag.id}"
+
         if tag.is_a?(Tag::SymbolClass)
           # @entry_class = tag.symbols[0].name
         elsif tag.is_a?(Tag::SetBackgroundColor)
@@ -78,7 +80,7 @@ module ARuby
         end
       end
     end
-    
+
     def to_swf
       # Create our body content
       body = ByteBuffer.new
@@ -136,7 +138,7 @@ module ARuby
       abc = Tag::DoABC.new
       abc.flags = 1
       abc.name = "aruby"
-      abc.bytecode = @interpreter.generate_byte_code
+      abc.bytecode = @workspace.generate_byte_code
       tags << abc
 
       symbol_class = Tag::SymbolClass.new

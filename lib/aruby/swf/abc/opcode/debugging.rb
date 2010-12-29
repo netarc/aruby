@@ -2,6 +2,36 @@ module ARuby
   class SWF
     class ABC
       module OpCode
+        # ID: 3 (0x03)
+        # DESC: Throws an exception
+        # STACK: …, value => … 
+        # The top value of the stack is popped off the stack and then thrown. The thrown value can be 
+        # of any type.
+        # When a throw is executed, the current method’s exception handler table is searched for an 
+        # exception handler. An exception handler matches if its range of offsets includes the offset of 
+        # this instruction, and if its type matches the type of the thrown object, or is a base class of the 
+        # type thrown. The first handler that matches is the one used. 
+        # If a handler is found then the stack is cleared, the exception object is pushed onto the stack, 
+        # and then execution resumes at the instruction offset specified by the handler. 
+        # If a handler is not found, then the method exits, and the exception is rethrown in the 
+        # invoking method, at which point it is searched for an exception handler as described here.
+        class Throw < Base
+          define_opcode 3, "throw"
+        end
+        
+        # ID: 90 (0x5A)
+        # DESC: Create a new catch scope
+        # STACK: ... => ..., catchscope
+        # index is a u30 that must be an index of an exception_info structure for this method.  
+        # This instruction creates a new object to serve as the scope object for the catch block for the 
+        # exception referenced by index. This new scope is pushed onto the operand stack. 
+        class NewCatch < Base
+          define_opcode 90, "new_catch"
+          struct do
+            u30 :index
+          end
+        end
+        
         # ID: 239 (0xEF)
         # DESC: Debugging info
         # STACK: ... => ...

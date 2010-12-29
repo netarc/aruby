@@ -27,6 +27,8 @@ END
           env.config.swf.entry_file = source_path
         end
 
+        workspace = ARuby::Workspace.new(env)
+        
         swf = ARuby::SWF.new(env)
         swf.process_script_from_file(env.config.swf.entry_file)
 

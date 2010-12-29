@@ -8,6 +8,10 @@ module ARuby
           struct do
             si24 :offset
           end
+          
+          def to_s
+            super " offset=#{offset}"
+          end
         end
         
         # ID: 9 (0x0C)
@@ -182,7 +186,7 @@ module ARuby
           struct do
             si24 :default_offset
             u30 :case_count
-            si24 :case_offsets, :size => lambda { case_count }
+            si24 :case_offsets, :array => {:initial_size => Proc.new { case_count + 1 }, :storage => false}
           end
         end
       end

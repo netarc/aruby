@@ -246,6 +246,20 @@ module ARuby
           end
         end
         
+        # ID: 109 (0x6D)
+        # DESC: Set the value of a slot
+        # STACK: ..., obj, value => ...
+        # slotindex is a u30 that must be an index of a slot on obj. slotindex must be greater than 0 and 
+        # less than or equal to the total number of slots obj has.
+        # This will set the value stored in the slot at slotindex on obj to value. value is first coerced to 
+        # the type of the slot at slotindex.
+        class SetSlot < Base
+          define_opcode 109, "set_slot"
+          struct do
+            u30 :slotindex
+          end
+        end
+        
         # ID: 110 (0x6E)
         # DESC: Get the value of a slot on the global scope
         # STACK: ... => ..., value 

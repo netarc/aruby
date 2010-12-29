@@ -27,6 +27,7 @@ module ARuby
           klass = TAG_BY_ID[tag_id]
           return nil if klass.nil?
 
+          puts "creating tag: #{klass.inspect}"
           tag = klass.new
           tag.unserialize_struct(tag_contents)
           tag
@@ -125,7 +126,7 @@ module ARuby
       class DebugID < Base
         define_tag 63
         struct do
-          byte :debug_id, :size => 16
+          byte :debug_id, :array => {:fixed_size => 16}
         end
       end
 
@@ -165,9 +166,9 @@ module ARuby
           #
           bit :has_metadata
           bit :actionscript3
-          bit :reserved2, :size => 2
+          bit :reserved2, :array => {:fixed_size => 2}
           bit :use_network
-          bit :reserved3, :size => 24
+          bit :reserved3, :array => {:fixed_size => 24}
         end
       end
 
@@ -177,7 +178,7 @@ module ARuby
       class SymbolClass < Base
         define_tag 76
         struct do
-          struct :symbols, :length => 0, :storage => :ui16 do
+          struct :symbols, :array => {:storage => :ui16} do
             ui16 :tag
             null_string :name
           end

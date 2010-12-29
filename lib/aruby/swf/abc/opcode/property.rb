@@ -2,6 +2,15 @@ module ARuby
   class SWF
     class ABC
       module OpCode
+        # ID: 30 (0x1E)
+        # DESC: Get the name of the next property when iterating over an object
+        # STACK: ..., obj, index => ..., name
+        # index and obj are popped off of the stack. index must be a value of type int. Gets the name of 
+        # the property that is at position index + 1 on the object obj, and pushes it onto the stack. 
+        class NextName < Base
+          define_opcode 30, "next_name"
+        end
+        
         # ID: 35 (0x23)
         # DESC: Get the name of the next property when iterating over an object
         # STACK: ..., obj, index => ..., value
@@ -208,6 +217,27 @@ module ARuby
         # initializer method it is able to set the value of const properties.
         class InitProperty < Base
           define_opcode 104, "init_property"
+          struct do
+            u30 :index
+          end
+          
+          def to_s
+            super " index=#{index}||#{@abc_file.multinames[index]}"
+          end
+        end
+        
+        # ID: 106 (0x6A)
+        # DESC: Delete a property
+        # STACK: ..., object, [ns], [name] => ..., value
+        # index is a u30 that must be an index into the multiname constant pool. If the multiname at 
+        # that index is a runtime multiname the name and/or namespace will also appear on the stack 
+        # so that the multiname can be constructed correctly at runtime. 
+        # This will invoke the [[Delete]] method on object with the name specified by the multiname. 
+        # If object is not dynamic or the property is a fixed property then nothing happens, and false 
+        # is pushed onto the stack. If object is dynamic and the property is not a fixed property, it is 
+        # removed from object and true is pushed onto the stack.
+        class DeleteProperty < Base
+          define_opcode 106, "delete_property"
           struct do
             u30 :index
           end

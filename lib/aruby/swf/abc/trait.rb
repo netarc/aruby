@@ -17,6 +17,21 @@ module ARuby
         Override = 0x02
         Metadata = 0x04
 
+        CONSTANT_Undefined          = 0x00 #
+        CONSTANT_Utf8               = 0x01 # string 
+        CONSTANT_Int                = 0x03 # integer 
+        CONSTANT_UInt               = 0x04 # uinteger 
+        CONSTANT_Double             = 0x06 # double 
+        CONSTANT_True               = 0x0B #
+        CONSTANT_False              = 0x0A # 
+        CONSTANT_Null               = 0x0C #
+        CONSTANT_Namespace          = 0x08 # namespace 
+        CONSTANT_PackageNamespace   = 0x16 # namespace 
+        CONSTANT_PackageInternalNs  = 0x17 # namespace 
+        CONSTANT_ProtectedNamespace = 0x18 # namespace 
+        CONSTANT_ExplicitNamespace  = 0x19 # namespace 
+        CONSTANT_StaticProtectedNs  = 0x1A # namespace 
+        CONSTANT_PrivateNs          = 0x05 # namespace 
 
         def to_s
           "#<Trait:0x#{object_id.to_s(16)} @type=#{@type} @name=#{@name_index}|#{name} @data=#{@data.to_s}>"
@@ -130,9 +145,11 @@ module ARuby
       class TraitSlot < TraitData
         attr_accessor :slot_id, :type_name_index
         attr_accessor :vindex, :vkind
+        
         def type_name
           @abc_file.multinames[@type_name_index] if @abc_file and @type_name_index
         end
+        
         def read_from_io(io)
           @slot_id = io.read_u30
           @type_name_index = io.read_u30
@@ -141,6 +158,7 @@ module ARuby
 
           self
         end
+        
         def write_to_io(io)
           io.write_u30 @slot_id
           io.write_u30 @type_name_index
@@ -151,7 +169,15 @@ module ARuby
         end
       
         def to_s
-          "@slot_id=#{@slot_id} @type_name_index=#{@type_name_index} @vindex=#{@vindex} @vkind=#{@vkind}"
+          if vkind == Trait::CONSTANT_Undefined
+            vdata = "Undefined"
+          elsif vkind == Trait::CONSTANT_Utf8
+            vdata = "String::#{@abc_file.strings[@vindex]}"
+          else
+            vdata = ""
+          end
+          
+          "@slot_id=#{@slot_id} @type_name_index=#{@type_name_index} #{vdata}"
         end
       
       end

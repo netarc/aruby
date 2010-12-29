@@ -148,19 +148,6 @@ module ARuby
             u30 :index
           end
         end
-
-        # ID: 90 (0x5A)
-        # DESC: Create a new catch scope
-        # STACK: ... => ..., catchscope
-        # index is a u30 that must be an index of an exception_info structure for this method.  
-        # This instruction creates a new object to serve as the scope object for the catch block for the 
-        # exception referenced by index. This new scope is pushed onto the operand stack. 
-        class NewCatch < Base
-          define_opcode 90, "new_catch"
-          struct do
-            u30 :index
-          end
-        end
       end
     end
   end

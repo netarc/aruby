@@ -34,7 +34,7 @@ module ARuby
     # General HeaderStruct
     class Header < StructuredObject
       struct do
-        byte   :signature, :size => 3
+        byte   :signature, :array => {:fixed_size => 3}
         ui8    :version
         ui32   :file_size
         string :body

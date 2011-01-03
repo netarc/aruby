@@ -27,7 +27,6 @@ module ARuby
           klass = TAG_BY_ID[tag_id]
           return nil if klass.nil?
 
-          puts "creating tag: #{klass.inspect}"
           tag = klass.new
           tag.unserialize_struct(tag_contents)
           tag

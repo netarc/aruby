@@ -21,32 +21,17 @@ module ARuby
     end
 
     @@iseq_insns = {}
-    def self.iseq_define_ins(id, operands, pop_values, &block)
+    def self.iseq_define_ins(id, &block)
       raise ISEQ_DuplicateInstruction, id if @@iseq_insns[id]
-      @@iseq_insns[id] = {:id => id, :operands => operands, :pop_values => pop_values, :block => block}
+      @@iseq_insns[id] = {:id => id, :block => block}
     end
-
-    def iseq_process_ins(iseq, scope_stack, scope_object)
+    def iseq_process_ins(iseq)
       unless iseq_def = @@iseq_insns[iseq[0]]
         raise ISEQ_UnknownInstruction, iseq[0]
       end
-
-      data_hash = {:val => :deadbeef, :_sys => {:stack => scope_stack, :object => scope_object}, :vm => @vm}
-      iseq_def[:operands].each_index do |i|
-        data_hash[iseq_def[:operands][i]] = iseq[1 + i]
-      end
-      iseq_def[:pop_values].reverse_each do |v|
-        data_hash[v] = scope_stack.pop
-      end
-      bi = Util::BlockBinding.new(data_hash, &iseq_def[:block])
-      scope_stack.push bi.val unless bi.val == :deadbeef
+      
+      instance_eval(&iseq_def[:block])
     end
-
-
-    iseq_define_ins :defineclass, [:flags], [] do
-
-    end
-
   end
 end
 

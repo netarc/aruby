@@ -39,12 +39,11 @@ module ARuby
     end
 
     # Process a block/thread of ISEQ in it's own scope
-    def iseq_process(iseq, file_path)
+    def iseq_process(iseq, file_path, scope_object=nil)
       iseq_is_yarv_simple_data! iseq
 
       # TODO: CLEANUP
       scope_stack = Stack.new
-      scope_object = nil
 
       iseq_line = 0
       iseq_label = nil
@@ -61,12 +60,12 @@ module ARuby
 
           puts "\n\r - ISEQ #{iseq_cmd.inspect}"
           @env.logger.debug " + start stack #{scope_stack.dump_to_s}"
-          iseq_process_ins iseq_cmd, scope_stack, scope_object
+          
+          iseq_process_ins iseq_cmd
 
           @env.logger.debug " + end stack #{scope_stack.dump_to_s}"
         end
       end
     end
-
   end
 end

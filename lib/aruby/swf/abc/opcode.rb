@@ -31,10 +31,11 @@ module ARuby
           end
           
           def initialize(*args)
+            super
             @abc_file = args[0]
             vals = args[1] || {}
             op_data = Base.find_opcode_data_by_class(self.class)
-            # self.id = op_data[:id]
+            self.id = op_data[:id]
             self.name = op_data[:name]
             vals.each_pair do |k, v|
               self.send :"#{k}=", v
@@ -45,7 +46,7 @@ module ARuby
             if SIZES[self.class]
               return SIZES[self.class]
             else
-              SIZES[self.class] = self.serialize.size
+              SIZES[self.class] = self.serialize_struct.size
             end
           end
 

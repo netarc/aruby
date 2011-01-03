@@ -3,7 +3,8 @@ module ARuby
     def initialize(env)
       @env = env
       @files_included = []
-      @interpreter = ARuby::Interpreter.new(@env)
+      @interpreter = ARuby::Interpreter.new(@env, self)
+      @classes = []
     end
 
     # Include a file for assembly into the Workspace.
@@ -23,9 +24,23 @@ module ARuby
       @interpreter.process_iseq(file_iseq.to_a, path)
     end
 
+    # Include ABC Byte Code for disassembly into the Workspace.
+    #
+    # @param byte_code [String] Raw ABC byte code.
+    def digest_byte_code(byte_code)
+      abc = ARuby::SWF::ABC.new
+      abc.unserialize(ByteBuffer.new(byte_code))
+    end
+
     # Take what has been included and assembled into the Workspace and generate it's appropriate byte code.
     def generate_byte_code
-      @interpreter.generate_byte_code
+      abc = ARuby::SWF::ABC.new
+      
+      @classes.each do |klass|
+        abc.create_class(klass)
+      end
+      
+      abc.serialize.to_s
     end
 
     private
@@ -55,3 +70,5 @@ module ARuby
     end
   end
 end
+
+require "aruby/workspace/class"

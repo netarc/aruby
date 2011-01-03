@@ -33,7 +33,6 @@ module ARuby
 
     private
 
-    # General HeaderStruct
     class Header < StructuredObject
       struct do
         byte   :signature, :array => {:fixed_size => 3}
@@ -67,16 +66,14 @@ module ARuby
       body_io.read_ui16 # frame_coutn
 
       while (tag = Tag::Base.new_from_io(body_io))
-        @env.logger.info "loaded tag: #{tag.id}"
+        @env.logger.info " - Tag #{tag.class}[#{tag.id}]"
 
         if tag.is_a?(Tag::SymbolClass)
           # @entry_class = tag.symbols[0].name
         elsif tag.is_a?(Tag::SetBackgroundColor)
           # @background_color = tag.background_color
         elsif tag.is_a?(Tag::DoABC)
-          abc = ARuby::SWF::ABC.new
-          abc.unserialize(ByteBuffer.new(tag.bytecode.to_s))
-          # @workspace.process_swf_bytecode tag.bytecode.to_s
+          @workspace.digest_byte_code(tag.bytecode.to_s)
         end
       end
     end

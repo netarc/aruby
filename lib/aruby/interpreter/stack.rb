@@ -1,5 +1,35 @@
 module ARuby
   class Interpreter
+    def pop_parent_class(stack)
+      parts = []
+      stack._stack.reverse.each do |line|
+        case line[0]
+        when :getconstant
+          parts << line[1].to_s
+          stack.pop()
+        else
+          stack.pop()
+          break
+        end
+      end
+      parts.reverse.join('.')
+    end
+    
+    # Given a package string, split it into [class,package].
+    #
+    # flash.dislay:Sprite => ["Sprite", "flash.display"]
+    # Flash.Dislay.Sprite => ["Sprite", "flash.display"]
+    def split_name_package(fullname)
+      fixing = fullname.gsub(/:/, ".")
+      split = fixing.match(/^(?:((?:\w+\.?)*)\.)?(\w+)$/) || []
+      name = split[2] || ""
+      package = split[1] || ""
+      # downcase the first letter of each package name
+      package = package.split(".").map {|s| s[0].downcase+s[1..-1]}.join(".")
+      [name, package]
+    end
+    
+    
     class Stack
       attr_reader :max_stack_depth
       attr_accessor :line

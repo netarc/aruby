@@ -33,10 +33,9 @@ module ARuby
         end
         def write(io)
           @codes.each do |code|
-            # puts " * #{code.to_s}"
-            code.serialize(io)
+            # puts " * #{code.to_s} - #{code.serialize_struct.inspect}"
+            code.serialize_struct(io)
           end
-
           self
         end
         def parse_command(io)

@@ -99,7 +99,7 @@ class ByteBuffer
     end
     type.write = Proc.new do |byte_buffer, data|
       value = data.to_i
-      bits = (Math.log(value.abs)/Math.log(2)).floor + 1
+      bits = value > 0 ? (Math.log(value.abs)/Math.log(2)).floor + 1 : 1
       shift = 0
       while bits > 0
         vv = (value >> shift) & 0x7F
@@ -118,6 +118,7 @@ class ByteBuffer
       size > 0 ? byte_buffer.read(size) : ""
     end
     type.write = Proc.new do |byte_buffer, data|
+      data = data.to_s
       byte_buffer.write_u30 data.length
       byte_buffer.write data if data.length > 0
     end

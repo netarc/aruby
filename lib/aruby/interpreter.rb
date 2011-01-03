@@ -1,18 +1,13 @@
 module ARuby
   class Interpreter
-    def initialize(env)
+    def initialize(env, workspace)
       @env = env
       @files_included = []
+      @workspace = workspace
     end
 
     def process_iseq(iseq, file_path)
       iseq_process_top iseq, file_path
-    end
-
-    def generate_byte_code
-      #abc = ARuby::ABC.new
-      #abc.serialize.to_s
-      ""
     end
 
     protected
@@ -48,3 +43,4 @@ end
 require "aruby/interpreter/iseq"
 require "aruby/interpreter/stack"
 require "aruby/interpreter/insns"
+require "aruby/interpreter/scope"

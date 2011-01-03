@@ -17,7 +17,8 @@ module ARuby
     RUBY_EVENT_SWITCH   = 0x20000
     RUBY_EVENT_COVERAGE = 0x40000
 
-    iseq_define_ins :trace, [:nf], [] do
+    iseq_define_ins :trace do
+      # , [:nf], []
     end
 
   end

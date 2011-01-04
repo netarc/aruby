@@ -4,13 +4,12 @@ module ARuby
 
     iseq_define_ins :getinlinecache do
       # , [:dst, :ic], []
-      # val = :nil
+      current_scope.stack.push :nil
     end
 
     iseq_define_ins :setinlinecache do
-      # , [:dst], []
-      # super_package = ARuby::Interpreter.pop_parent_class(_sys[:stack])
-      # val = [:constant, super_package]
+      super_package = pop_parent_class
+      current_scope.stack.push [:package, super_package]
     end
 
   end

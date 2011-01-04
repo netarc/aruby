@@ -20,16 +20,12 @@ module ARuby
     end
 
     iseq_define_ins :defineclass do
-      # , [:klass_name, :iseq, :flags], [:klass_pkg, :super_pkg]
-      # if klass_pkg.is_a?(::Symbol)
-      #   klass_package = klass_name.to_s
-      # else  
-      #   klass_package = klass_pkg[1] + "." + klass_name.to_s
-      # end
-      # 
+      super_class = current_scope.stack.pop
+      class_scope = current_scope.stack.pop
+      puts "class owner: #{class_scope.inspect}"
+
       # klass = workspace.create_or_extend_class(klass_package, super_pkg[1])
       # val = [:scope, klass, iseq]
     end
-    
   end
 end

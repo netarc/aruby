@@ -4,6 +4,7 @@ module ARuby
       @env = env
       @files_included = []
       @workspace = workspace
+      @scope_stack = []
     end
 
     def process_iseq(iseq, file_path)

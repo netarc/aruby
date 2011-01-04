@@ -1,14 +1,16 @@
 module ARuby
   class Interpreter
-    def pop_parent_class(stack)
+    def current_stack
+      current_scope.stack
+    end
+    
+    def pop_parent_class
       parts = []
-      stack._stack.reverse.each do |line|
-        case line[0]
+      while (part = current_stack.pop) do
+        case part[0]
         when :getconstant
-          parts << line[1].to_s
-          stack.pop()
+          parts << part[1].to_s
         else
-          stack.pop()
           break
         end
       end
@@ -29,61 +31,44 @@ module ARuby
       [name, package]
     end
     
-    
-    class Stack
+    class Stack < Array
       attr_reader :max_stack_depth
       attr_accessor :line
 
       def initialize
-        @stack = []
         @max_stack_depth = 0
       end
 
-      def dump_to_s
-        @stack.inspect
-      end
-
-      def _stack
-        @stack
-      end
-
       def stretch_stack
-        size = @stack.size + 1
-        @max_stack_depth = size if size > @max_stack_depth
+        len = size + 1
+        @max_stack_depth = len if len > @max_stack_depth
       end
 
       def push(val)
-        @stack << val
-        @max_stack_depth = @stack.size if @stack.size > @max_stack_depth
+        super
+        @max_stack_depth = size if size > @max_stack_depth
       end
 
-      def pop(size=1)
-        raise Exception.new("invalid stack size: expected atleast #{size} was #{@stack.size}") if @stack.size < size
-        if size <= 1
-          @stack.pop
+      def pop(*args)
+        len = args.pop || 0
+        raise Exception.new("invalid stack size: expected atleast #{len} was #{size}") if size < len
+        if len <= 1
+          super
         else
-          (@stack.slice!(-size, size) || []).reverse
+          (slice!(-len, len) || []).reverse
         end
       end
 
-      def pop_array(size=1)
-        if size <= 0
+      def pop_array(len=1)
+        if len <= 0
           []
         else
-          if size > 1
-            pop_stack(size)
+          if len > 1
+            pop_stack(len)
           else
-            [pop_stack(size)]
+            [pop_stack(len)]
           end
         end
-      end
-
-      def [](val)
-        @stack[val]
-      end
-
-      def top
-        @stack[-1]
       end
 
       def dup_top

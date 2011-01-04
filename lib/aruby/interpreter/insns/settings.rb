@@ -18,8 +18,6 @@ module ARuby
     RUBY_EVENT_COVERAGE = 0x40000
 
     iseq_define_ins :trace do
-      # , [:nf], []
     end
-
   end
 end

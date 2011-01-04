@@ -42,14 +42,13 @@ module ARuby
     def iseq_process(iseq, file_path, scope_object=nil)
       iseq_is_yarv_simple_data! iseq
 
-      # TODO: CLEANUP
-      scope_stack = Stack.new
-
+      @scope_stack << (scope = Scope.new)
+      
       iseq_line = 0
       iseq_label = nil
 
       iseq_body = iseq[13]
-      iseq_body.each do |iseq_cmd|
+      iseq_body.each do |iseq_cmd|        
         if iseq_cmd.is_a? Integer
           iseq_line = iseq_cmd
           @env.logger.debug "--[#{iseq_cmd}]--"
@@ -57,15 +56,17 @@ module ARuby
           iseq_label = iseq_cmd
           @env.logger.debug "--[#{iseq_cmd}]--"
         elsif iseq_cmd.is_a? Array
+          scope.iseq_cmd = iseq_cmd[0]
+          scope.iseq_params = iseq_cmd[1..-1]
 
           puts "\n\r - ISEQ #{iseq_cmd.inspect}"
-          @env.logger.debug " + start stack #{scope_stack.dump_to_s}"
-          
+          @env.logger.debug " + start stack #{scope.stack.inspect}"
           iseq_process_ins iseq_cmd
-
-          @env.logger.debug " + end stack #{scope_stack.dump_to_s}"
+          @env.logger.debug " + end stack #{scope.stack.inspect}"
         end
       end
+      
+      @scope_stack.pop
     end
   end
 end

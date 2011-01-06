@@ -4,17 +4,30 @@ module ARuby
       current_scope.stack
     end
     
-    def pop_parent_class
+    def stack_get_package
       parts = []
-      while (part = current_stack.pop) do
-        case part[0]
-        when :getconstant
-          parts << part[1].to_s
-        else
+      while (part = current_stack.last) do
+        if part == :nil
+          parts << ""
+          current_stack.pop
           break
+        else
+          case part[0]
+          when :package
+            if parts.empty?
+              current_stack.pop
+              return part[1] 
+            end
+            break
+          when :getconstant
+            parts << part[1].to_s
+            current_stack.pop
+          else
+            break
+          end
         end
       end
-      parts.reverse.join('.')
+      parts.reverse.join('::')
     end
     
     # Given a package string, split it into [class,package].

@@ -2,6 +2,12 @@ module ARuby
   class Interpreter
     protected
 
+    class ISEQ_NotImplemented < StandardError
+      def message
+        "Encountered a dead end in support."
+      end
+    end
+    
     class ISEQ_InvalidFormat < StandardError
       def message
         "The instruction sequence generated from the Ruby VM was not in the correct format."
@@ -23,16 +29,16 @@ module ARuby
       raise ISEQ_InvalidFormat unless iseq[13].is_a?(Array)
     end
 
-    def iseq_process_top(iseq, file_path)
+    def iseq_process(iseq, file_path)
       iseq_is_yarv_simple_data! iseq
 
       case iseq[9]
       when :top
         iseq_process iseq, file_path
       when :class
-        raise NotImplemented
+        iseq_process iseq, file_path
       when :method
-        raise NotImplemented
+        raise ISEQ_NotImplemented
       else
         raise ISEQ_InvalidEntry, iseq[9]
       end
@@ -42,7 +48,8 @@ module ARuby
     def iseq_process(iseq, file_path, scope_object=nil)
       iseq_is_yarv_simple_data! iseq
 
-      @scope_stack << (scope = Scope.new)
+      scope = @scope_stack.last
+      puts "\n--- processing iseq for scope: #{scope.module.inspect}"
       
       iseq_line = 0
       iseq_label = nil

@@ -11,7 +11,6 @@ module ARuby
   autoload :Command,     'aruby/command'
   autoload :Errors,      'aruby/errors'
   autoload :Environment, 'aruby/environment'
-  autoload :Interpreter, 'aruby/interpreter'
   autoload :SWF,         'aruby/swf'
   autoload :UI,          'aruby/ui'
   autoload :Util,        'aruby/util'

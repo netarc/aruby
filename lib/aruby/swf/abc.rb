@@ -161,7 +161,9 @@ module ARuby
       def get_hierarchy(m)
         hierarchy = []
         cur = get_parent(m)
-        while cur != nil
+        last = nil
+        while cur != nil && last != nil
+          last = cur
           hierarchy.unshift(cur)
           cur = @hierarchy[cur]
         end

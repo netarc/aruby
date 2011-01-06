@@ -1,10 +1,17 @@
 module ARuby
+  def self.wut
+    5
+  end
+  
   class Workspace
+    autoload :Interpreter, 'aruby/workspace/interpreter'
+
     def initialize(env)
       @env = env
       @files_included = []
       @interpreter = ARuby::Interpreter.new(@env, self)
       @classes = []
+      puts "new workspace: #{wut}"
     end
 
     # Include a file for assembly into the Workspace.

@@ -15,7 +15,7 @@ module ARuby
       when VM_SPECIAL_OBJECT_CBASE
         current_scope.stack.push :cbase
       when VM_SPECIAL_OBJECT_CONST_BASE
-        current_scope.stack.push :const_base
+        current_scope.stack.push [:package, current_scope.module]
       else
         # TODO: Log/Abort?
         raise "putspecialobject insn: unknown value_type"
@@ -32,8 +32,16 @@ module ARuby
     end
 
     iseq_define_ins :putobject do
-      # , [:val], [] 
+      val = current_scope.iseq_params.shift
+      
+      if val === Object
+        current_scope.stack.push :nil
+      end
     end
+    
+    iseq_define_ins :putiseq do
+    end
+
 
   end
 end

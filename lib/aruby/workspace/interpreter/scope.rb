@@ -7,6 +7,8 @@ module ARuby
     end
 
     class Scope
+      attr_accessor :module
+      attr_accessor :object
       attr_accessor :stack, :max_local_count
       attr_accessor :iseq_cmd, :iseq_params
 
@@ -14,6 +16,8 @@ module ARuby
         @stack = ARuby::Interpreter::Stack.new
         @max_local_count = 1
         @iseq_cmd = []
+        @module = ""
+        @object = nil
       end
 
       def access_local(idx)

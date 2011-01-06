@@ -1,17 +1,16 @@
 module ARuby
-  def self.wut
-    5
-  end
-  
+  # The Bridge between Interpeter and SWF::ABC
+  #
   class Workspace
     autoload :Interpreter, 'aruby/workspace/interpreter'
+    autoload :Util,        'aruby/workspace/util'
 
     def initialize(env)
       @env = env
       @files_included = []
-      @interpreter = ARuby::Interpreter.new(@env, self)
+      @interpreter = Interpreter.new(@env, self)
       @classes = []
-      puts "new workspace: #{wut}"
+      puts "new workspace: #{ARuby.wut}"
     end
 
     # Include a file for assembly into the Workspace.
